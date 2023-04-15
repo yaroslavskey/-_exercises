@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Borts {
+  id Int    @id @default(autoincrement())
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  ident String @db.VarChar(255)
+  type String @db.VarChar(255)
+  origin String @db.VarChar(255)
+  destination String? @db.VarChar(255)
+  departure DateTime @db.Timestamptz()
+  estimatedArrivalTime DateTime? @db.Timestamptz()
+  estimatedTimeEnroute String? @db.VarChar(255)
+
+  @@index([origin, destination, createdAt(sort: Desc)])
+}
+
+model Aircraft {
+  id Int       @id @default(autoincrement())
+  aircraftCategory String @db.VarChar(255)
+  aircraftSuperType String @db.VarChar(255)
+  icaoCode String @db.VarChar(255)
+}
+
+model bortsBase {
+  id Int    @id @default(autoincrement())
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  ident String @db.VarChar(255)
+  type String @db.VarChar(255)
+  superType String @db.VarChar(255)
+  origin String @db.VarChar(255)
+  destination String? @db.VarChar(255)
+  departure DateTime @db.Timestamptz()
+  estimatedArrivalTime DateTime? @db.Timestamptz()
+  estimatedTimeEnroute String? @db.VarChar(255)
+
+  @@index([origin, destination, departure(sort: Desc)])
+}
